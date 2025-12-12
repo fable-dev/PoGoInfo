@@ -26,7 +26,9 @@ function forEachLevelInRange(min, max, cb) {
   // step by 0.5
   for (let lvl = min; lvl <= max + 0.001; lvl += 0.5) {
     const rounded = Math.round(lvl * 2) / 2;
-    if (rounded >= 1 && rounded <= 40) cb(rounded);
+    if (rounded >= 1 && rounded <= 50) {
+      cb(rounded);
+    }
   }
 }
 
