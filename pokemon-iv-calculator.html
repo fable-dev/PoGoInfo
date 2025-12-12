@@ -162,6 +162,27 @@
               </div>
             </div>
 
+            <!-- Encounter source -->
+<div class="field-group">
+  <label class="field-label" for="input-source">
+    Source
+    <span class="field-info" title="Where this Pokémon came from. This affects its possible level and minimum IVs.">?</span>
+  </label>
+  <select id="input-source" class="field-input">
+    <option value="">Unknown / Any</option>
+    <option value="wild">Wild (normal)</option>
+    <option value="wild_boosted">Wild (weather boosted)</option>
+    <option value="raid_research">Raid / Research / Reward</option>
+    <option value="egg">Egg hatch</option>
+    <option value="trade">Trade</option>
+    <option value="lucky">Lucky</option>
+  </select>
+  <p class="field-hint">
+    Helps narrow down level range and IV floor (e.g. raid/research/egg: high IV floor).
+  </p>
+</div>
+
+
             <!-- Appraisal items -->
             <fieldset class="fieldset">
               <legend class="fieldset-title">
