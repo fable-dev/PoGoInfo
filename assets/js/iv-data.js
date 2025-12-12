@@ -84,29 +84,29 @@ export const CPM_BY_LEVEL = {
   40: 0.790300
 };
 
-// Stardust bands → approximate allowed level range (non-Lucky, up to 40).
-// This is simplified but good enough for IV narrowing.
+// Stardust bands → allowed level ranges (non-XL, up to level 40).
+// These bands are the same for all Pokémon and line up with your Dragonite table.
 export const STARDUST_LEVEL_RANGES = {
-  200: { min: 1, max: 3.5 },
-  400: { min: 4, max: 7.5 },
-  600: { min: 8, max: 11.5 },
-  800: { min: 12, max: 15.5 },
-  1000: { min: 16, max: 19.5 },
-  1300: { min: 20, max: 22.5 },
-  1600: { min: 23, max: 25.5 },
-  1900: { min: 26, max: 28.5 },
-  2200: { min: 29, max: 30.5 },
-  2500: { min: 31, max: 32.5 },
-  3000: { min: 33, max: 33.5 },
-  3500: { min: 34, max: 34.5 },
-  4000: { min: 35, max: 35.5 },
-  4500: { min: 36, max: 36.5 },
-  5000: { min: 37, max: 37.5 },
-  6000: { min: 38, max: 38.5 },
-  7000: { min: 39, max: 39.5 },
-  8000: { min: 40, max: 40 },
-  9000: { min: 40, max: 40 },
-  10000: { min: 40, max: 40 }
+  200:  { min: 1,   max: 2.5 },
+  400:  { min: 3,   max: 4.5 },
+  600:  { min: 5,   max: 6.5 },
+  800:  { min: 7,   max: 8.5 },
+  1000: { min: 9,   max: 10.5 },
+  1300: { min: 11,  max: 12.5 },
+  1600: { min: 13,  max: 14.5 },
+  1900: { min: 15,  max: 16.5 },
+  2200: { min: 17,  max: 18.5 },
+  2500: { min: 19,  max: 20.5 },
+  3000: { min: 21,  max: 22.5 },
+  3500: { min: 23,  max: 24.5 },
+  4000: { min: 25,  max: 26.5 },
+  4500: { min: 27,  max: 28.5 },
+  5000: { min: 29,  max: 30.5 },
+  6000: { min: 31,  max: 32.5 },
+  7000: { min: 33,  max: 34.5 },
+  8000: { min: 35,  max: 36.5 },
+  9000: { min: 37,  max: 38.5 },
+  10000:{ min: 39,  max: 40 }  // We stop at 40 (no XL levels yet)
 };
 
 // Basic appraisal → IV range mapping (approximate and simple).
