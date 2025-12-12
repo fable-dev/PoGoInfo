@@ -205,7 +205,7 @@ function updateSummaryDisplay() {
     elements.resultBestWorst.textContent = "—";
     elements.resultMeterFill.style.width = "0%";
     elements.resultRating.textContent = hasCoreInputs
-      ? "No combinations found. Check CP, HP, Stardust, and note we currently support up to Level 40."
+      ? "No combinations found. Check CP, HP, Stardust, and note we currently support up to Level 50."
       : "Awaiting input";
     elements.resultCount.textContent = "0 matches";
     elements.ivTableBody.innerHTML = "";
