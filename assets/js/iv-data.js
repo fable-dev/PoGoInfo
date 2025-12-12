@@ -1,9 +1,5 @@
 // assets/js/iv-data.js
 
-// CP multipliers by level (1.0 to 40.0, including half levels)
-// Rounded values are sufficient for IV calculation.
-// assets/js/iv-data.js
-
 // Base CP multipliers at integer levels, using the standard GO Hub table.
 export const CPM_BASE = {
   1: 0.094,
@@ -60,7 +56,7 @@ export const CPM_BASE = {
 };
 
 // Get CPM for any level with 0.5 granularity (1.0–50.0).
-// For half levels, we average current and next integer CPM.
+// For half levels, average the current and next integer-level CPM.
 export function getCPM(level) {
   const rounded = Math.round(level * 2) / 2;
 
@@ -77,6 +73,7 @@ export function getCPM(level) {
   if (cLow == null || cUp == null) return null;
   return (cLow + cUp) / 2;
 }
+
 
 
 // Stardust cost → approximate allowed level range (includes XL up to level 50).
@@ -108,6 +105,48 @@ export const STARDUST_LEVEL_RANGES = {
   14000: { min: 47,   max: 48.5 },
   15000: { min: 49,   max: 50 }
 };
+
+// Encounter source presets: level ranges + IV floors.
+const SOURCE_PRESETS = {
+  // Typical assumptions – you can refine later if you want.
+  wild: {
+    minLevel: 1,
+    maxLevel: 30,
+    ivFloor: 0
+  },
+  wild_boosted: {
+    minLevel: 6,
+    maxLevel: 35,
+    ivFloor: 0
+  },
+  raid_research: {
+    // Includes raid (20/25), research (15), GO Battle League, etc.
+    minLevel: 15,
+    maxLevel: 25,
+    ivFloor: 10
+  },
+  egg: {
+    minLevel: 20,
+    maxLevel: 20,
+    ivFloor: 10
+  },
+  trade: {
+    minLevel: 1,
+    maxLevel: 50,
+    ivFloor: 0
+  },
+  lucky: {
+    minLevel: 1,
+    maxLevel: 50,
+    ivFloor: 12
+  }
+};
+
+export function getSourceConstraints(key) {
+  if (!key) return null;
+  return SOURCE_PRESETS[key] || null;
+}
+
 
 // Basic appraisal → IV range mapping (approximate and simple).
 export const APPRAISAL_BUCKETS = {
