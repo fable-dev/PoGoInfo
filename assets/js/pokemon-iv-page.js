@@ -1,9 +1,11 @@
 // assets/js/pokemon-iv-page.js
 
 import {
-  POKEMON_BASE_STATS,
-  searchPokemonByName
-} from "./iv-data.js";
+  generateIvSpreads,
+  ratingFromPercent,
+  computeCpHpAtLevel
+} from "./iv-engine.js";
+
 import {
   generateIvSpreads,
   ratingFromPercent
@@ -27,6 +29,8 @@ function cacheElements() {
   elements.hpInput = $("#input-hp");
   elements.stardustSelect = $("#input-stardust");
   elements.recentCheckbox = $("#input-recent");
+  elements.sourceSelect = $("#input-source");
+
 
   elements.appraisalLeader = $("#appraisal-leader");
   elements.appraisalAtk = $("#appraisal-atk");
@@ -307,6 +311,9 @@ function encodeStateToUrl() {
   if (elements.stardustSelect.value)
     params.set("sd", elements.stardustSelect.value);
   if (elements.recentCheckbox.checked) params.set("recent", "1");
+  if (elements.sourceSelect.value) {
+    params.set("src", elements.sourceSelect.value);
+  }
 
   const appraisal = getAppraisalFilters();
   if (appraisal.leader) params.set("leader", appraisal.leader);
@@ -335,12 +342,15 @@ function applyStateFromUrl() {
   const cp = params.get("cp");
   const hp = params.get("hp");
   const sd = params.get("sd");
+  
   const recent = params.get("recent");
+  const src = params.get("src");
 
   if (cp) elements.cpInput.value = cp;
   if (hp) elements.hpInput.value = hp;
   if (sd) elements.stardustSelect.value = sd;
   elements.recentCheckbox.checked = recent === "1";
+  if (src) elements.sourceSelect.value = src;
 
   const leader = params.get("leader");
   const atk = params.get("atk");
@@ -376,8 +386,10 @@ function runCalculation(appraisalOverride) {
     hp: elements.hpInput.value,
     stardust: elements.stardustSelect.value,
     recentBandOnly: elements.recentCheckbox.checked,
-    appraisal: appraisalFilters
+    appraisal: appraisalFilters,
+    sourceKey: elements.sourceSelect.value || ""
   });
+
 
   filteredResults = rawResults;
   updateSummaryDisplay();
