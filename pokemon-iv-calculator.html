@@ -59,22 +59,25 @@
           <form id="iv-main-form" novalidate>
             <!-- Pokémon selector -->
             <div class="field-group">
-              <label class="field-label" for="pokemon-search">
-                Pokémon
-                <span class="field-info" title="Start typing a Pokémon name and select it from the list.">?</span>
-              </label>
-              <div class="pokemon-search-wrapper">
-                <input
-                  id="pokemon-search"
-                  class="field-input"
-                  type="text"
-                  placeholder="e.g. Dragonite"
-                  autocomplete="off"
-                />
-                <div id="pokemon-search-results" class="pokemon-search-results"></div>
-              </div>
-              <p class="field-hint">We use base stats by species to calculate IV possibilities.</p>
-            </div>
+  <label class="field-label" for="pokemon-search">
+    Pokémon
+    <span class="field-info" title="Start typing a Pokémon name and select it from the list.">?</span>
+  </label>
+  <div class="pokemon-search-wrapper">
+    <input
+      id="pokemon-search"
+      class="field-input"
+      type="text"
+      placeholder="e.g. Dragonite"
+      autocomplete="off"
+    />
+    <div id="pokemon-search-results" class="pokemon-search-results"></div>
+  </div>
+  <p class="field-error" data-error-for="pokemon-search"></p>
+  <p class="field-hint">
+    Start typing and pick from the list, or type the exact name (e.g. "Dragonite") and press Calculate.
+  </p>
+</div>
 
             <!-- CP / HP -->
             <div class="field-row">
