@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PoGoInfo | IV Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="PoGoInfo - A lightweight Pokémon GO companion with an IV calculator."
+  />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo">PoGoInfo</div>
+      <nav class="nav">
+        <!-- Future links (e.g., /moves, /raids) -->
+        <a href="#" class="nav-link nav-link-active">IV Calculator</a>
+        <a href="#" class="nav-link nav-link-disabled">Tools (soon)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <h1 class="hero-title">Pokémon GO IV Calculator</h1>
+          <p class="hero-subtitle">
+            Quickly evaluate your Pokémon’s IVs. Enter the Attack, Defense, and
+            Stamina IV values (0–15) to see the total and percentage.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="calculator-section">
+      <div class="container calculator-grid">
+        <!-- Input Card -->
+        <div class="card calculator-card">
+          <h2 class="card-title">Enter IVs</h2>
+          <p class="card-description">
+            These are the individual values for your Pokémon, each from 0 to 15.
+          </p>
+          <form id="iv-form" novalidate>
+            <div class="field-group">
+              <label for="pokemon-name" class="field-label">
+                Pokémon (optional)
+              </label>
+              <input
+                type="text"
+                id="pokemon-name"
+                class="field-input"
+                placeholder="e.g. Dragonite"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="iv-attack" class="field-label">
+                  Attack IV
+                  <span class="field-range">0–15</span>
+                </label>
+                <input
+                  type="number"
+                  id="iv-attack"
+                  class="field-input"
+                  min="0"
+                  max="15"
+                  step="1"
+                  required
+                />
+                <p class="field-error" data-error-for="iv-attack"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="iv-defense" class="field-label">
+                  Defense IV
+                  <span class="field-range">0–15</span>
+                </label>
+                <input
+                  type="number"
+                  id="iv-defense"
+                  class="field-input"
+                  min="0"
+                  max="15"
+                  step="1"
+                  required
+                />
+                <p class="field-error" data-error-for="iv-defense"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="iv-stamina" class="field-label">
+                  Stamina IV
+                  <span class="field-range">0–15</span>
+                </label>
+                <input
+                  type="number"
+                  id="iv-stamina"
+                  class="field-input"
+                  min="0"
+                  max="15"
+                  step="1"
+                  required
+                />
+                <p class="field-error" data-error-for="iv-stamina"></p>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              Calculate IV
+            </button>
+            <button type="button" class="btn-ghost" id="reset-btn">
+              Reset
+            </button>
+          </form>
+        </div>
+
+        <!-- Result Card -->
+        <div class="card result-card">
+          <h2 class="card-title">Result</h2>
+          <p class="card-description">
+            See the total IV and overall percentage rating.
+          </p>
+
+          <div class="result-main">
+            <div class="result-name" id="result-name">No Pokémon selected</div>
+            <div class="result-row">
+              <div class="result-block">
+                <div class="result-label">Total IV</div>
+                <div class="result-value" id="result-total">— / 45</div>
+              </div>
+              <div class="result-block">
+                <div class="result-label">IV %</div>
+                <div class="result-value" id="result-percent">—%</div>
+              </div>
+            </div>
+
+            <div class="result-meter-wrapper">
+              <div class="result-meter-label">
+                Overall rating
+              </div>
+              <div class="result-meter">
+                <div class="result-meter-fill" id="result-meter-fill"></div>
+              </div>
+              <div class="result-meter-text" id="result-rating">Awaiting input</div>
+            </div>
+
+            <ul class="result-notes">
+              <li>Max total IV is 45 (15 / 15 / 15).</li>
+              <li>IV % = (Attack + Defense + Stamina) ÷ 45 × 100.</li>
+              <li>This is a basic IV percentage calculator; later you can extend it with CP/HP/Stardust based calculations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>PoGoInfo</span>
+      <span class="footer-divider">|</span>
+      <span>Unofficial Pokémon GO companion tool.</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/iv-calculator.js"></script>
+</body>
+</html>
