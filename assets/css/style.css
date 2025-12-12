@@ -362,3 +362,251 @@ body {
     padding-top: 24px;
   }
 }
+
+/* ===== IV Calculator Layout ===== */
+
+.iv-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+  gap: 18px;
+}
+
+.iv-card {
+  min-height: 480px;
+}
+
+.hero-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Pokémon search */
+
+.pokemon-search-wrapper {
+  position: relative;
+}
+
+.pokemon-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 2px;
+  background-color: #000;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  max-height: 210px;
+  overflow-y: auto;
+  z-index: 10;
+  display: none;
+}
+
+.pokemon-search-results.visible {
+  display: block;
+}
+
+.pokemon-search-item {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.pokemon-search-item:hover {
+  background-color: #111;
+}
+
+/* Field hints & info icon */
+
+.field-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.field-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  font-size: 0.65rem;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  cursor: help;
+  opacity: 0.7;
+}
+
+.field-info:hover {
+  opacity: 1;
+}
+
+/* Fieldset */
+
+.fieldset {
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 10px 10px 12px;
+  margin: 10px 0 14px;
+}
+
+.fieldset-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Multiline input */
+
+.field-input-multiline {
+  resize: vertical;
+}
+
+/* Checkbox label */
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  accent-color: var(--accent);
+}
+
+/* Form actions */
+
+.form-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* IV summary */
+
+.iv-summary {
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  padding: 10px 10px 12px;
+  margin-bottom: 12px;
+  background: #000;
+}
+
+.iv-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.iv-summary-block {
+  flex: 1 1 120px;
+}
+
+/* Table */
+
+.iv-table-wrapper {
+  margin-top: 10px;
+}
+
+.iv-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.iv-table-title {
+  font-size: 0.9rem;
+}
+
+.iv-table-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.iv-scroll {
+  max-height: 220px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  overflow-y: auto;
+  background-color: #000;
+}
+
+.iv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.iv-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #050505;
+  z-index: 1;
+}
+
+.iv-table th,
+.iv-table td {
+  padding: 6px 8px;
+  text-align: right;
+}
+
+.iv-table th:first-child,
+.iv-table td:first-child {
+  text-align: left;
+}
+
+.iv-table tbody tr:nth-child(even) {
+  background-color: #050505;
+}
+
+/* Power-up section */
+
+.powerup-section {
+  margin-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+.powerup-title {
+  font-size: 0.95rem;
+  margin: 0 0 2px;
+}
+
+.powerup-description {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.powerup-form {
+  margin-bottom: 8px;
+}
+
+.powerup-history {
+  margin-top: 4px;
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 960px) {
+  .iv-layout-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-inner {
+    gap: 12px;
+  }
+  .hero-actions {
+    justify-content: flex-start;
+  }
+}
+
