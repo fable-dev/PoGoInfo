@@ -470,14 +470,42 @@ function attachEvents() {
   });
 
   // Power-up apply (simple history logger for now)
+    // Power-up apply: level → level + 0.5 narrowing
   elements.powerupApply.addEventListener("click", (e) => {
     e.preventDefault();
-    if (!filteredResults.length) return;
+    if (!filteredResults.length || !selectedPokemon) return;
 
     const cp = parseInt(elements.powerupCP.value, 10);
     const hp = parseInt(elements.powerupHP.value, 10);
 
     if (!cp || !hp) return;
+
+    const narrowed = [];
+
+    for (const spread of filteredResults) {
+      const nextLevel = spread.level + 0.5;
+      if (nextLevel > 50) continue;
+
+      const proj = computeCpHpAtLevel(selectedPokemon, spread, nextLevel);
+      if (!proj) continue;
+
+      if (proj.cp === cp && proj.hp === hp) {
+        // Keep same IVs, but now at nextLevel
+        narrowed.push({
+          ...spread,
+          level: nextLevel
+        });
+      }
+    }
+
+    if (narrowed.length) {
+      filteredResults = narrowed;
+      updateSummaryDisplay();
+    } else {
+      // No spreads survive; show that clearly
+      filteredResults = [];
+      updateSummaryDisplay();
+    }
 
     powerupHistory.push({
       cp,
