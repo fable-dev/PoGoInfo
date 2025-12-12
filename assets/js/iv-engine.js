@@ -1,6 +1,6 @@
 // assets/js/iv-engine.js
 
-import { CPM_BY_LEVEL, STARDUST_LEVEL_RANGES, APPRAISAL_BUCKETS } from "./iv-data.js";
+import { getCPM, STARDUST_LEVEL_RANGES, APPRAISAL_BUCKETS } from "./iv-data.js";
 
 function calcCP(baseAtk, baseDef, baseSta, ivAtk, ivDef, ivSta, level) {
   const cpm = CPM_BY_LEVEL[level];
