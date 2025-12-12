@@ -6,15 +6,22 @@ function calcCP(baseAtk, baseDef, baseSta, ivAtk, ivDef, ivSta, level) {
   const cpm = CPM_BY_LEVEL[level];
   if (!cpm) return null;
 
-  const atk = (baseAtk + ivAtk) * cpm;
-  const def = (baseDef + ivDef) * cpm;
-  const sta = Math.floor((baseSta + ivSta) * cpm);
+  const atk = baseAtk + ivAtk;
+  const def = baseDef + ivDef;
+  const sta = baseSta + ivSta;
 
+  // HP (Sta) uses CPM once
+  const hp = Math.floor(sta * cpm);
+
+  // CP uses CPM squared on the raw stats
   const cp = Math.max(
     10,
-    Math.floor((atk * Math.sqrt(def) * Math.sqrt(sta)) / 10)
+    Math.floor(
+      atk * Math.sqrt(def) * Math.sqrt(sta) * cpm * cpm / 10
+    )
   );
-  return { cp, hp: sta };
+
+  return { cp, hp };
 }
 
 function forEachLevelInRange(min, max, cb) {
