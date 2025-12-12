@@ -179,8 +179,14 @@ function validateCoreInputs() {
 
 
 function updateSummaryDisplay() {
-  if (!filteredResults.length || !selectedPokemon) {
-    elements.resultName.textContent = selectedPokemon ? selectedPokemon.name : "—";
+  const hasCoreInputs =
+    elements.cpInput.value.trim() &&
+    elements.hpInput.value.trim() &&
+    elements.stardustSelect.value.trim();
+
+  // No Pokémon selected at all
+  if (!selectedPokemon) {
+    elements.resultName.textContent = "—";
     elements.resultRange.textContent = "—";
     elements.resultBestWorst.textContent = "—";
     elements.resultMeterFill.style.width = "0%";
@@ -190,6 +196,23 @@ function updateSummaryDisplay() {
     return;
   }
 
+  // Pokémon selected but no spreads
+  if (!filteredResults.length) {
+    elements.resultName.textContent = selectedPokemon.name;
+    elements.resultRange.textContent = hasCoreInputs
+      ? "No valid IVs for given CP/HP/Stardust"
+      : "—";
+    elements.resultBestWorst.textContent = "—";
+    elements.resultMeterFill.style.width = "0%";
+    elements.resultRating.textContent = hasCoreInputs
+      ? "No combinations found. Check CP, HP, Stardust, and note we currently support up to Level 40."
+      : "Awaiting input";
+    elements.resultCount.textContent = "0 matches";
+    elements.ivTableBody.innerHTML = "";
+    return;
+  }
+
+  // Normal case: we have results
   elements.resultName.textContent = selectedPokemon.name;
 
   const best = filteredResults[0];
@@ -214,9 +237,8 @@ function updateSummaryDisplay() {
       ? "1 match"
       : `${filteredResults.length} matches`;
 
-  // Render table
   const rows = filteredResults
-    .slice(0, 200) // guard against very large results
+    .slice(0, 200)
     .map((r) => {
       return `
         <tr>
