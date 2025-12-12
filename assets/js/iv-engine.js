@@ -1,6 +1,11 @@
 // assets/js/iv-engine.js
 
-import { getCPM, STARDUST_LEVEL_RANGES, APPRAISAL_BUCKETS } from "./iv-data.js";
+import {
+  getCPM,
+  STARDUST_LEVEL_RANGES,
+  APPRAISAL_BUCKETS,
+  getSourceConstraints
+} from "./iv-data.js";
 
 function calcCP(baseAtk, baseDef, baseSta, ivAtk, ivDef, ivSta, level) {
   const cpm = getCPM(level);
@@ -46,6 +51,19 @@ export function ratingFromPercent(percent) {
   return "Poor";
 }
 
+// Helper for power-up narrowing: project a spread to a new level.
+export function computeCpHpAtLevel(baseStats, spread, level) {
+  return calcCP(
+    baseStats.atk,
+    baseStats.def,
+    baseStats.sta,
+    spread.ivAtk,
+    spread.ivDef,
+    spread.ivSta,
+    level
+  );
+}
+
 // Core: generate all possible IV spreads matching inputs.
 export function generateIvSpreads({
   baseStats,
@@ -53,7 +71,8 @@ export function generateIvSpreads({
   hp,
   stardust,
   recentBandOnly,
-  appraisal = {}
+  appraisal = {},
+  sourceKey
 }) {
   const results = [];
   const cpInt = parseInt(cp, 10);
@@ -62,29 +81,43 @@ export function generateIvSpreads({
 
   if (!baseStats || !cpInt || !hpInt || !sdInt) return results;
 
-  // Determine level range from stardust band
+  // Stardust band
   const band = STARDUST_LEVEL_RANGES[sdInt];
+
   let minLevel = 1;
-  let maxLevel = 40;
+  let maxLevel = 50;
 
   if (band) {
     if (recentBandOnly) {
       minLevel = band.min;
       maxLevel = band.max;
     } else {
-      // allow any level up to this band
       maxLevel = band.max;
     }
   }
 
-  forEachLevelInRange(minLevel, maxLevel, (level) => {
-    for (let ivAtk = 0; ivAtk <= 15; ivAtk++) {
+  // Source constraints (wild/raid/egg/trade/lucky)
+  const source = getSourceConstraints(sourceKey);
+  let ivFloor = 0;
+
+  if (source) {
+    minLevel = Math.max(minLevel, source.minLevel);
+    maxLevel = Math.min(maxLevel, source.maxLevel);
+    ivFloor = source.ivFloor ?? 0;
+  }
+
+  if (minLevel > maxLevel) {
+    return results;
+  }
+
+    forEachLevelInRange(minLevel, maxLevel, (level) => {
+    for (let ivAtk = ivFloor; ivAtk <= 15; ivAtk++) {
       if (!appraisalAllowed(ivAtk, appraisal.atk)) continue;
 
-      for (let ivDef = 0; ivDef <= 15; ivDef++) {
+      for (let ivDef = ivFloor; ivDef <= 15; ivDef++) {
         if (!appraisalAllowed(ivDef, appraisal.def)) continue;
 
-        for (let ivSta = 0; ivSta <= 15; ivSta++) {
+        for (let ivSta = ivFloor; ivSta <= 15; ivSta++) {
           if (!appraisalAllowed(ivSta, appraisal.sta)) continue;
 
           const stats = calcCP(
