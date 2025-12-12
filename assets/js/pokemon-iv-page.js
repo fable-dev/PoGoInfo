@@ -140,9 +140,24 @@ function validateCoreInputs() {
   clearAllErrors();
   let valid = true;
 
+  // Try to resolve Pokémon from typed name if not already selected
   if (!selectedPokemon) {
-    // highlight the Pokémon input
-    setFieldError("pokemon-search", "Select a Pokémon");
+    const typed = elements.pokemonSearch.value.trim();
+    if (typed) {
+      const match = POKEMON_BASE_STATS.find(
+        (p) => p.name.toLowerCase() === typed.toLowerCase()
+      );
+      if (match) {
+        selectedPokemon = match;
+      }
+    }
+  }
+
+  if (!selectedPokemon) {
+    setFieldError(
+      "pokemon-search",
+      "Select a Pokémon from the list or type a valid name (e.g. Dragonite)."
+    );
     valid = false;
   }
 
@@ -161,6 +176,7 @@ function validateCoreInputs() {
 
   return valid;
 }
+
 
 function updateSummaryDisplay() {
   if (!filteredResults.length || !selectedPokemon) {
