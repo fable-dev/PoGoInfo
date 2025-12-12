@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pokémon GO IV Calculator | PoGoInfo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Pokémon GO IV Calculator for PoGoInfo. Calculate possible IVs from CP, HP, Stardust, and appraisals."
+  />
+  <link rel="canonical" href="https://fable-dev.github.io/PoGoInfo/pokemon-iv-calculator.html" />
+  <meta name="robots" content="index,follow" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="theme-dark">
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo">PoGoInfo</div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="pokemon-iv-calculator.html" class="nav-link nav-link-active">
+          IV Calculator
+        </a>
+        <a href="#" class="nav-link nav-link-disabled">More Tools (soon)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <h1 class="hero-title">Pokémon GO IV Calculator</h1>
+          <p class="hero-subtitle">
+            Enter your Pokémon’s details (CP, HP, Stardust, appraisal) to see all
+            possible IV combinations and ratings.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="prefill-demo" class="btn-ghost" type="button">
+            Use example data
+          </button>
+          <button id="share-results" class="btn-ghost" type="button">
+            Share current setup
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="calculator-section">
+      <div class="container iv-layout-grid">
+        <!-- Input Panel -->
+        <div class="card iv-card">
+          <h2 class="card-title">Input</h2>
+          <p class="card-description">
+            Basic info from your Pokémon detail screen. Hover over labels for help.
+          </p>
+
+          <form id="iv-main-form" novalidate>
+            <!-- Pokémon selector -->
+            <div class="field-group">
+              <label class="field-label" for="pokemon-search">
+                Pokémon
+                <span class="field-info" title="Start typing a Pokémon name and select it from the list.">?</span>
+              </label>
+              <div class="pokemon-search-wrapper">
+                <input
+                  id="pokemon-search"
+                  class="field-input"
+                  type="text"
+                  placeholder="e.g. Dragonite"
+                  autocomplete="off"
+                />
+                <div id="pokemon-search-results" class="pokemon-search-results"></div>
+              </div>
+              <p class="field-hint">We use base stats by species to calculate IV possibilities.</p>
+            </div>
+
+            <!-- CP / HP -->
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label" for="input-cp">
+                  CP
+                  <span class="field-info" title="Combat Power from the Pokémon summary screen.">?</span>
+                </label>
+                <input
+                  id="input-cp"
+                  class="field-input"
+                  type="number"
+                  min="10"
+                  step="1"
+                  required
+                />
+                <p class="field-error" data-error-for="input-cp"></p>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="input-hp">
+                  HP
+                  <span class="field-info" title="HP value displayed below the CP on your Pokémon.">?</span>
+                </label>
+                <input
+                  id="input-hp"
+                  class="field-input"
+                  type="number"
+                  min="10"
+                  step="1"
+                  required
+                />
+                <p class="field-error" data-error-for="input-hp"></p>
+              </div>
+            </div>
+
+            <!-- Stardust + recent toggle -->
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label" for="input-stardust">
+                  Stardust cost
+                  <span class="field-info" title="Power-up Stardust cost shown on the Power Up button.">?</span>
+                </label>
+                <select id="input-stardust" class="field-input" required>
+                  <option value="">Select stardust</option>
+                  <option>200</option>
+                  <option>400</option>
+                  <option>600</option>
+                  <option>800</option>
+                  <option>1000</option>
+                  <option>1300</option>
+                  <option>1600</option>
+                  <option>1900</option>
+                  <option>2200</option>
+                  <option>2500</option>
+                  <option>3000</option>
+                  <option>3500</option>
+                  <option>4000</option>
+                  <option>4500</option>
+                  <option>5000</option>
+                  <option>6000</option>
+                  <option>7000</option>
+                  <option>8000</option>
+                  <option>9000</option>
+                  <option>10000</option>
+                </select>
+                <p class="field-error" data-error-for="input-stardust"></p>
+              </div>
+              <div class="field-group field-group-inline">
+                <label class="field-label checkbox-label" for="input-recent">
+                  <input id="input-recent" type="checkbox" />
+                  <span>Recently caught / powered up</span>
+                </label>
+                <p class="field-hint">
+                  Narrows level to the current Stardust band (no older levels).
+                </p>
+              </div>
+            </div>
+
+            <!-- Appraisal items -->
+            <fieldset class="fieldset">
+              <legend class="fieldset-title">
+                Appraisal
+                <span class="field-info" title="Use your team leader's appraisal to narrow down IVs.">?</span>
+              </legend>
+
+              <div class="field-group">
+                <label class="field-label" for="appraisal-leader">Team leader</label>
+                <select id="appraisal-leader" class="field-input">
+                  <option value="">None</option>
+                  <option value="blanche">Blanche (Mystic)</option>
+                  <option value="candela">Candela (Valor)</option>
+                  <option value="spark">Spark (Instinct)</option>
+                </select>
+              </div>
+
+              <div class="field-row">
+                <div class="field-group">
+                  <label class="field-label" for="appraisal-atk">Attack</label>
+                  <select id="appraisal-atk" class="field-input">
+                    <option value="">Unknown</option>
+                    <option value="best">Best</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="appraisal-def">Defense</label>
+                  <select id="appraisal-def" class="field-input">
+                    <option value="">Unknown</option>
+                    <option value="best">Best</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="appraisal-sta">HP</label>
+                  <select id="appraisal-sta" class="field-input">
+                    <option value="">Unknown</option>
+                    <option value="best">Best</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="appraisal-notes">
+                  Appraisal text (optional)
+                </label>
+                <textarea
+                  id="appraisal-notes"
+                  class="field-input field-input-multiline"
+                  rows="2"
+                  placeholder="Paste or paraphrase the appraisal text here if you want to keep notes."
+                ></textarea>
+              </div>
+
+              <button id="apply-appraisal" class="btn-ghost" type="button">
+                Apply appraisal filter
+              </button>
+            </fieldset>
+
+            <div class="form-actions">
+              <button class="btn-primary" type="submit">
+                Calculate IVs
+              </button>
+              <button id="reset-all" class="btn-ghost" type="button">
+                Reset
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="card iv-card">
+          <h2 class="card-title">Results</h2>
+          <p class="card-description">
+            All possible IV spreads that match your inputs. Appraisal and power-ups will narrow this list.
+          </p>
+
+          <!-- Summary -->
+          <div class="iv-summary">
+            <div class="iv-summary-row">
+              <div class="iv-summary-block">
+                <div class="result-label">Pokémon</div>
+                <div class="result-value" id="result-name">—</div>
+              </div>
+              <div class="iv-summary-block">
+                <div class="result-label">IV range</div>
+                <div class="result-value" id="result-range">—</div>
+              </div>
+              <div class="iv-summary-block">
+                <div class="result-label">Best / worst</div>
+                <div class="result-value" id="result-best-worst">—</div>
+              </div>
+            </div>
+
+            <div class="result-meter-wrapper">
+              <div class="result-meter-label">IV Meter</div>
+              <div class="result-meter">
+                <div id="result-meter-fill" class="result-meter-fill"></div>
+              </div>
+              <div id="result-rating" class="result-meter-text">Awaiting input</div>
+            </div>
+          </div>
+
+          <!-- Possible combos -->
+          <div class="iv-table-wrapper">
+            <div class="iv-table-header">
+              <div class="iv-table-title">
+                Possible IV combinations
+                <span class="field-info" title="All Attack / Defense / HP IV triplets that match your CP, HP, Stardust, and appraisal filters.">?</span>
+              </div>
+              <div class="iv-table-meta">
+                <span id="result-count">0 matches</span>
+              </div>
+            </div>
+
+            <div class="iv-scroll">
+              <table class="iv-table" id="iv-combo-table">
+                <thead>
+                  <tr>
+                    <th>Lvl</th>
+                    <th>Atk IV</th>
+                    <th>Def IV</th>
+                    <th>HP IV</th>
+                    <th>Total</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filled dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Power-up tracker -->
+          <div class="powerup-section">
+            <h3 class="powerup-title">Power-Up Tracker</h3>
+            <p class="powerup-description">
+              After powering up once, enter the new CP and HP to narrow down the possibilities further.
+            </p>
+            <form id="powerup-form" class="powerup-form" novalidate>
+              <div class="field-row">
+                <div class="field-group">
+                  <label class="field-label" for="powerup-cp">Post power-up CP</label>
+                  <input
+                    id="powerup-cp"
+                    class="field-input"
+                    type="number"
+                    min="10"
+                    step="1"
+                  />
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="powerup-hp">Post power-up HP</label>
+                  <input
+                    id="powerup-hp"
+                    class="field-input"
+                    type="number"
+                    min="10"
+                    step="1"
+                  />
+                </div>
+              </div>
+              <button id="powerup-apply" class="btn-ghost" type="button">
+                Power Up Once &amp; Recalculate
+              </button>
+            </form>
+
+            <div class="powerup-history">
+              <div class="iv-table-header">
+                <div class="iv-table-title">History</div>
+              </div>
+              <div class="iv-scroll">
+                <table class="iv-table" id="powerup-history-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>CP</th>
+                      <th>HP</th>
+                      <th>Remaining spreads</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Filled dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- /Results card -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>PoGoInfo</span>
+      <span class="footer-divider">|</span>
+      <span>Unofficial Pokémon GO companion tool.</span>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/pokemon-iv-page.js"></script>
+</body>
+</html>
