@@ -62,8 +62,11 @@ let powerupHistory = [];
 function setFieldError(id, message) {
   const el = document.querySelector(`[data-error-for="${id}"]`);
   const input = document.getElementById(id);
-  if (!el || !input) return;
-  el.textContent = message || "";
+  if (!input) return;
+
+  if (el) {
+    el.textContent = message || "";
+  }
   input.classList.toggle("error", !!message);
 }
 
@@ -138,6 +141,7 @@ function validateCoreInputs() {
   let valid = true;
 
   if (!selectedPokemon) {
+    // highlight the Pokémon input
     setFieldError("pokemon-search", "Select a Pokémon");
     valid = false;
   }
@@ -272,7 +276,9 @@ function encodeStateToUrl() {
   if (appraisal.def) params.set("def", appraisal.def);
   if (appraisal.sta) params.set("sta", appraisal.sta);
 
-  return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+  const base = `${window.location.origin}${window.location.pathname}`;
+  const query = params.toString();
+  return query ? `${base}?${query}` : base;
 }
 
 function applyStateFromUrl() {
@@ -309,7 +315,7 @@ function applyStateFromUrl() {
   if (sta) elements.appraisalSta.value = sta;
 
   // If we have enough info, auto-calc
-  if (monName && cp && hp && sd) {
+  if (selectedPokemon && cp && hp && sd) {
     runCalculation();
   }
 }
@@ -377,7 +383,8 @@ function attachEvents() {
   });
 
   // Prefill demo data
-  elements.prefillDemo.addEventListener("click", () => {
+  elements.prefillDemo.addEventListener("click", (e) => {
+    e.preventDefault(); // just in case
     const demo = POKEMON_BASE_STATS.find(
       (p) => p.name.toLowerCase() === "dragonite"
     );
@@ -398,7 +405,8 @@ function attachEvents() {
   });
 
   // Share results
-  elements.shareResults.addEventListener("click", async () => {
+  elements.shareResults.addEventListener("click", async (e) => {
+    e.preventDefault(); // avoid form submit
     const url = encodeStateToUrl();
     try {
       await navigator.clipboard.writeText(url);
@@ -411,8 +419,9 @@ function attachEvents() {
     }
   });
 
-  // Power-up apply
-  elements.powerupApply.addEventListener("click", () => {
+  // Power-up apply (simple history logger for now)
+  elements.powerupApply.addEventListener("click", (e) => {
+    e.preventDefault();
     if (!filteredResults.length) return;
 
     const cp = parseInt(elements.powerupCP.value, 10);
@@ -420,23 +429,6 @@ function attachEvents() {
 
     if (!cp || !hp) return;
 
-    // Simple filter: new spreads must produce cp/hp for level+0.5
-    const narrowed = [];
-    for (const r of filteredResults) {
-      const nextLevel = r.level + 0.5;
-      if (nextLevel > 40) continue;
-
-      const cpm = generateIvSpreads.__cpmForPowerup
-        ? generateIvSpreads.__cpmForPowerup(nextLevel)
-        : null;
-      // Instead of calling internal, we recalc inline,
-      // using a tiny helper that mimics iv-engine calc.
-      // In practice, we just reuse the engine by a small wrapper:
-      // For brevity, approximated below.
-    });
-
-    // Simpler: we just keep history and let user manually recalc
-    // (full linked-level narrowing can be upgraded later).
     powerupHistory.push({
       cp,
       hp,
@@ -447,14 +439,6 @@ function attachEvents() {
   });
 }
 
-/* NOTE:
- * For now, the "Power Up Once & Recalculate" button records the
- * new CP/HP and remaining spread count. A fully accurate
- * power-up-level-linked narrowing requires applying the level+0.5
- * constraint per spread, which can be added if you want to push
- * this to Calcy-like fidelity.
- */
-
 function init() {
   cacheElements();
   loadHistory();
@@ -464,4 +448,13 @@ function init() {
   updateSummaryDisplay();
 }
 
-document.addEventListener("DOMContentLoaded", init);
+/**
+ * Safe init for module scripts:
+ * - If DOM is still loading, wait for DOMContentLoaded
+ * - If DOM is already ready, run immediately
+ */
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
