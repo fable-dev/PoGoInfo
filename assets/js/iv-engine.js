@@ -3,21 +3,19 @@
 import { getCPM, STARDUST_LEVEL_RANGES, APPRAISAL_BUCKETS } from "./iv-data.js";
 
 function calcCP(baseAtk, baseDef, baseSta, ivAtk, ivDef, ivSta, level) {
-  const cpm = CPM_BY_LEVEL[level];
+  const cpm = getCPM(level);
   if (!cpm) return null;
 
   const atk = baseAtk + ivAtk;
   const def = baseDef + ivDef;
   const sta = baseSta + ivSta;
 
-  // HP (Sta) uses CPM once
   const hp = Math.floor(sta * cpm);
 
-  // CP uses CPM squared on the raw stats
   const cp = Math.max(
     10,
     Math.floor(
-      atk * Math.sqrt(def) * Math.sqrt(sta) * cpm * cpm / 10
+      ((atk) * Math.sqrt(def) * Math.sqrt(sta) * (cpm * cpm)) / 10
     )
   );
 
